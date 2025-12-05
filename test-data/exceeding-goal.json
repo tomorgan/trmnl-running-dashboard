@@ -1,0 +1,42 @@
+{
+  "week_label": "Week of Dec 1-7, 2025",
+  "weekly_miles": 32.5,
+  "target_miles": 25.0,
+  "progress_percentage": 100,
+  "weeks_until_event": 3,
+  "event_name": "New Year 5K",
+  "has_runs": true,
+  "runs": [
+    {
+      "date_formatted": "Mon, Dec 1",
+      "distance_miles": 8.0,
+      "duration_minutes": 65,
+      "pace_per_mile": "8:07"
+    },
+    {
+      "date_formatted": "Tue, Dec 2",
+      "distance_miles": 5.5,
+      "duration_minutes": 44,
+      "pace_per_mile": "8:00"
+    },
+    {
+      "date_formatted": "Wed, Dec 3",
+      "distance_miles": 10.0,
+      "duration_minutes": 82,
+      "pace_per_mile": "8:12"
+    },
+    {
+      "date_formatted": "Thu, Dec 4",
+      "distance_miles": 4.0,
+      "duration_minutes": 32,
+      "pace_per_mile": "8:00"
+    },
+    {
+      "date_formatted": "Sat, Dec 6",
+      "distance_miles": 5.0,
+      "duration_minutes": 40,
+      "pace_per_mile": "8:00"
+    }
+  ],
+  "quote": "Ask yourself: 'Can I give more?' The answer is usually yes."
+}

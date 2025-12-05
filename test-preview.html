@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Dashboard - Test Preview</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .controls {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .controls h2 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background: #333;
+        }
+
+        button.secondary {
+            background: #666;
+        }
+
+        .preview-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .preview-header {
+            background: #000;
+            color: #fff;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+
+        #preview {
+            padding: 0;
+        }
+
+        .scenario-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .info {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h2>🧪 Plugin Test Preview</h2>
+        
+        <div class="scenario-buttons">
+            <button onclick="loadScenario('normal')">Normal Week</button>
+            <button onclick="loadScenario('exceeding')">Exceeding Goal</button>
+            <button onclick="loadScenario('empty')">No Runs</button>
+            <button onclick="loadScenario('single')">Single Run</button>
+        </div>
+
+        <div class="control-group">
+            <label>Weekly Miles:</label>
+            <input type="number" id="weekly_miles" step="0.1" value="15.5">
+        </div>
+
+        <div class="control-group">
+            <label>Target Miles:</label>
+            <input type="number" id="target_miles" step="0.1" value="25.0">
+        </div>
+
+        <div class="control-group">
+            <label>Weeks Until Event:</label>
+            <input type="number" id="weeks_until_event" value="8">
+        </div>
+
+        <div class="control-group">
+            <label>Event Name:</label>
+            <input type="text" id="event_name" value="London Marathon 2026">
+        </div>
+
+        <div class="control-group">
+            <label>Quote:</label>
+            <select id="quote">
+                <option>The miracle isn't that I finished. The miracle is that I had the courage to start.</option>
+                <option>Run when you can, walk if you have to, crawl if you must; just never give up.</option>
+                <option>The only bad run is the one that didn't happen.</option>
+                <option>Your legs are not giving out. Your head is giving up. Keep going.</option>
+                <option>Pain is temporary. Quitting lasts forever.</option>
+            </select>
+        </div>
+
+        <button onclick="updatePreview()">Update Preview</button>
+        <button class="secondary" onclick="exportData()">Export JSON</button>
+
+        <div class="info">
+            💡 Test different scenarios to see how the plugin looks with various data states.
+        </div>
+    </div>
+
+    <div class="preview-container">
+        <div class="preview-header">TRMNL Preview</div>
+        <div id="preview"></div>
+    </div>
+
+    <script id="template-source" type="text/x-handlebars-template">
+        {{PLUGIN_TEMPLATE}}
+    </script>
+
+    <script>
+        // Load the plugin template
+        let templateSource = '';
+        
+        fetch('plugin.html')
+            .then(response => response.text())
+            .then(html => {
+                // Extract just the body content
+                const bodyMatch = html.match(/<body>([\s\S]*)<\/body>/);
+                if (bodyMatch) {
+                    templateSource = bodyMatch[1];
+                }
+                updatePreview();
+            });
+
+        const scenarios = {
+            normal: {
+                weekly_miles: 15.5,
+                target_miles: 25.0,
+                weeks_until_event: 8,
+                event_name: "London Marathon 2026",
+                runs: [
+                    {
+                        date_formatted: "Mon, Dec 1",
+                        distance_miles: 5.2,
+                        duration_minutes: 45,
+                        pace_per_mile: "8:39"
+                    },
+                    {
+                        date_formatted: "Wed, Dec 3",
+                        distance_miles: 6.1,
+                        duration_minutes: 52,
+                        pace_per_mile: "8:31"
+                    },
+                    {
+                        date_formatted: "Thu, Dec 5",
+                        distance_miles: 4.2,
+                        duration_minutes: 36,
+                        pace_per_mile: "8:34"
+                    }
+                ]
+            },
+            exceeding: {
+                weekly_miles: 32.5,
+                target_miles: 25.0,
+                weeks_until_event: 3,
+                event_name: "New Year 5K",
+                runs: [
+                    {
+                        date_formatted: "Mon, Dec 1",
+                        distance_miles: 8.0,
+                        duration_minutes: 65,
+                        pace_per_mile: "8:07"
+                    },
+                    {
+                        date_formatted: "Tue, Dec 2",
+                        distance_miles: 5.5,
+                        duration_minutes: 44,
+                        pace_per_mile: "8:00"
+                    },
+                    {
+                        date_formatted: "Wed, Dec 3",
+                        distance_miles: 10.0,
+                        duration_minutes: 82,
+                        pace_per_mile: "8:12"
+                    },
+                    {
+                        date_formatted: "Thu, Dec 4",
+                        distance_miles: 4.0,
+                        duration_minutes: 32,
+                        pace_per_mile: "8:00"
+                    },
+                    {
+                        date_formatted: "Sat, Dec 6",
+                        distance_miles: 5.0,
+                        duration_minutes: 40,
+                        pace_per_mile: "8:00"
+                    }
+                ]
+            },
+            empty: {
+                weekly_miles: 0,
+                target_miles: 25.0,
+                weeks_until_event: 12,
+                event_name: "Spring Half Marathon",
+                runs: []
+            },
+            single: {
+                weekly_miles: 3.1,
+                target_miles: 20.0,
+                weeks_until_event: 15,
+                event_name: "City Marathon 2026",
+                runs: [
+                    {
+                        date_formatted: "Sun, Dec 7",
+                        distance_miles: 3.1,
+                        duration_minutes: 28,
+                        pace_per_mile: "9:02"
+                    }
+                ]
+            }
+        };
+
+        function loadScenario(name) {
+            const scenario = scenarios[name];
+            document.getElementById('weekly_miles').value = scenario.weekly_miles;
+            document.getElementById('target_miles').value = scenario.target_miles;
+            document.getElementById('weeks_until_event').value = scenario.weeks_until_event;
+            document.getElementById('event_name').value = scenario.event_name;
+            
+            // Store runs in a global var for the scenario
+            window.currentRuns = scenario.runs;
+            
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const weekly_miles = parseFloat(document.getElementById('weekly_miles').value);
+            const target_miles = parseFloat(document.getElementById('target_miles').value);
+            const progress_percentage = Math.min(100, Math.round((weekly_miles / target_miles) * 100));
+            
+            const data = {
+                week_label: "Week of Dec 1-7, 2025",
+                weekly_miles: weekly_miles,
+                target_miles: target_miles,
+                progress_percentage: progress_percentage,
+                weeks_until_event: parseInt(document.getElementById('weeks_until_event').value),
+                event_name: document.getElementById('event_name').value,
+                has_runs: window.currentRuns && window.currentRuns.length > 0,
+                runs: window.currentRuns || [],
+                quote: document.getElementById('quote').value
+            };
+
+            if (templateSource) {
+                const template = Handlebars.compile(templateSource);
+                const html = template(data);
+                document.getElementById('preview').innerHTML = html;
+            }
+        }
+
+        function exportData() {
+            const weekly_miles = parseFloat(document.getElementById('weekly_miles').value);
+            const target_miles = parseFloat(document.getElementById('target_miles').value);
+            const progress_percentage = Math.min(100, Math.round((weekly_miles / target_miles) * 100));
+            
+            const data = {
+                week_label: "Week of Dec 1-7, 2025",
+                weekly_miles: weekly_miles,
+                target_miles: target_miles,
+                progress_percentage: progress_percentage,
+                weeks_until_event: parseInt(document.getElementById('weeks_until_event').value),
+                event_name: document.getElementById('event_name').value,
+                has_runs: window.currentRuns && window.currentRuns.length > 0,
+                runs: window.currentRuns || [],
+                quote: document.getElementById('quote').value
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'test-data.json';
+            a.click();
+        }
+
+        // Initialize with normal scenario
+        window.currentRuns = scenarios.normal.runs;
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "week_label": "Week of Dec 1-7, 2025",
+  "weekly_miles": 13.1,
+  "target_miles": 30.0,
+  "progress_percentage": 44,
+  "weeks_until_event": 1,
+  "event_name": "Very Long Named Event Like The Great North South East West Marathon Championship",
+  "has_runs": true,
+  "runs": [
+    {
+      "date_formatted": "Sun, Dec 7",
+      "distance_miles": 13.1,
+      "duration_minutes": 120,
+      "pace_per_mile": "9:09"
+    }
+  ],
+  "quote": "Every morning in Africa, a gazelle wakes up. It knows it must run faster than the fastest lion or it will be killed. Whether you are a lion or a gazelle, when the sun comes up, you better be running."
+}

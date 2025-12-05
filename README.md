@@ -43,11 +43,32 @@ The plugin expects a JSON endpoint that returns the following structure:
 }
 ```
 
-## Setup
+## Quick Start
 
-1. Clone this repository
-2. Configure your API endpoint in the TRMNL plugin settings
-3. Deploy the `index.html` file to your TRMNL device
+1. **Clone this repository**
+   ```bash
+   git clone https://github.com/tomorgan/trmnl-running-dashboard.git
+   cd trmnl-running-dashboard
+   ```
+
+2. **Test locally**
+   ```bash
+   # Open test preview in browser
+   open test-preview.html
+   
+   # Validate plugin structure
+   node validate.js
+   ```
+
+3. **Implement your API** (see `API-GUIDE.md`)
+   - Create endpoint that returns running data
+   - Transform to TRMNL merge variable format
+   - Deploy to a public HTTPS endpoint
+
+4. **Deploy to TRMNL**
+   - Upload `plugin.html` and `plugin.json`
+   - Configure your API endpoint URL
+   - Add API key if required
 
 ## Files
 

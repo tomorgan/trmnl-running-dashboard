@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Dashboard</title>
+    <style>
+        :root {
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 12px;
+            --spacing-lg: 16px;
+            --spacing-xl: 24px;
+            --border-thick: 3px;
+            --border-thin: 2px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: var(--spacing-lg);
+            line-height: 1.3;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-md);
+            border-bottom: var(--border-thick) solid #000;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .progress-label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .progress-stats {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 32px;
+            border: var(--border-thick) solid #000;
+            background: #fff;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #000;
+        }
+
+        .progress-percentage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: #fff;
+            mix-blend-mode: difference;
+        }
+
+        /* Event Info */
+        .event-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .event-card {
+            border: var(--border-thin) solid #000;
+            padding: var(--spacing-md);
+        }
+
+        .event-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: var(--spacing-xs);
+            letter-spacing: 0.5px;
+        }
+
+        .event-name {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .event-countdown {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .event-countdown-label {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        /* Runs Table */
+        .runs-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .section-header {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: var(--border-thin) solid #000;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .runs-list {
+            border: var(--border-thin) solid #000;
+        }
+
+        .run-item {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-bottom: 1px solid #ddd;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: var(--spacing-sm);
+            font-size: 13px;
+        }
+
+        .run-item:last-child {
+            border-bottom: none;
+        }
+
+        .run-header {
+            font-weight: 700;
+            background: #000;
+            color: #fff;
+            border-bottom: var(--border-thin) solid #000;
+        }
+
+        .run-value {
+            font-weight: 600;
+        }
+
+        .run-label {
+            opacity: 0.6;
+            font-size: 11px;
+            display: block;
+        }
+
+        .empty-runs {
+            padding: var(--spacing-xl);
+            text-align: center;
+            opacity: 0.4;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* Quote */
+        .quote-section {
+            padding: var(--spacing-lg);
+            border: var(--border-thin) solid #000;
+            background: #000;
+            color: #fff;
+            text-align: center;
+        }
+
+        .quote-text {
+            font-size: 14px;
+            font-style: italic;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">🏃 Running Dashboard</div>
+        <div class="subtitle">{{week_label}}</div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-label">Weekly Progress</div>
+            <div class="progress-stats">{{weekly_miles}} / {{target_miles}} mi</div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: {{progress_percentage}}%"></div>
+            <div class="progress-percentage">{{progress_percentage}}%</div>
+        </div>
+    </div>
+
+    <div class="event-section">
+        <div class="event-card">
+            <div class="event-label">Next Event</div>
+            <div class="event-name">{{event_name}}</div>
+        </div>
+        <div class="event-card">
+            <div class="event-label">Countdown</div>
+            <div class="event-countdown">
+                {{weeks_until_event}}
+                <span class="event-countdown-label">weeks</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="runs-section">
+        <div class="section-header">This Week's Runs</div>
+        {{#if has_runs}}
+        <div class="runs-list">
+            <div class="run-item run-header">
+                <div>Date</div>
+                <div>Distance</div>
+                <div>Time</div>
+                <div>Pace</div>
+            </div>
+            {{#each runs}}
+            <div class="run-item">
+                <div>
+                    <span class="run-label">Date</span>
+                    <span class="run-value">{{date_formatted}}</span>
+                </div>
+                <div>
+                    <span class="run-label">Distance</span>
+                    <span class="run-value">{{distance_miles}} mi</span>
+                </div>
+                <div>
+                    <span class="run-label">Time</span>
+                    <span class="run-value">{{duration_minutes}}m</span>
+                </div>
+                <div>
+                    <span class="run-label">Pace</span>
+                    <span class="run-value">{{pace_per_mile}}</span>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="runs-list">
+            <div class="empty-runs">No runs logged this week — lace up!</div>
+        </div>
+        {{/if}}
+    </div>
+
+    <div class="quote-section">
+        <div class="quote-text">"{{quote}}"</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+{
+  "plugin_uuid": "running-dashboard",
+  "name": "Running Dashboard",
+  "description": "Track your weekly running progress with stats, upcoming events, and motivation",
+  "author": "tomorgan",
+  "version": "1.0.0",
+  "markup_strategy": "handlebars",
+  "refresh_interval": 3600,
+  "merge_variables": [
+    {
+      "name": "week_label",
+      "type": "string",
+      "description": "Current week label (e.g., 'Week of Dec 1-7')",
+      "required": true
+    },
+    {
+      "name": "weekly_miles",
+      "type": "number",
+      "description": "Total miles run this week",
+      "required": true
+    },
+    {
+      "name": "target_miles",
+      "type": "number",
+      "description": "Target miles for the week",
+      "required": true
+    },
+    {
+      "name": "progress_percentage",
+      "type": "number",
+      "description": "Percentage of weekly goal achieved (0-100)",
+      "required": true
+    },
+    {
+      "name": "weeks_until_event",
+      "type": "number",
+      "description": "Number of weeks until next running event",
+      "required": true
+    },
+    {
+      "name": "event_name",
+      "type": "string",
+      "description": "Name of the next running event",
+      "required": true
+    },
+    {
+      "name": "has_runs",
+      "type": "boolean",
+      "description": "Whether there are any runs this week",
+      "required": true
+    },
+    {
+      "name": "runs",
+      "type": "array",
+      "description": "Array of run objects for the week",
+      "required": false,
+      "items": {
+        "date_formatted": {
+          "type": "string",
+          "description": "Formatted date (e.g., 'Mon, Dec 1')"
+        },
+        "distance_miles": {
+          "type": "number",
+          "description": "Distance in miles"
+        },
+        "duration_minutes": {
+          "type": "number",
+          "description": "Duration in minutes"
+        },
+        "pace_per_mile": {
+          "type": "string",
+          "description": "Pace per mile (e.g., '8:30')"
+        }
+      }
+    },
+    {
+      "name": "quote",
+      "type": "string",
+      "description": "Inspirational running quote",
+      "required": true
+    }
+  ],
+  "settings": {
+    "api_endpoint": {
+      "type": "url",
+      "label": "API Endpoint URL",
+      "description": "URL that returns your running data in JSON format",
+      "required": true
+    },
+    "api_key": {
+      "type": "string",
+      "label": "API Key (optional)",
+      "description": "API key for authentication if required",
+      "required": false,
+      "secret": true
+    }
+  }
+}

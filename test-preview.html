@@ -85,6 +85,190 @@
             padding: 0;
         }
 
+        /* Plugin styles embedded from plugin.html */
+        #preview {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 16px;
+            line-height: 1.3;
+        }
+
+        #preview .header {
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #000;
+        }
+
+        #preview .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        #preview .subtitle {
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        #preview .progress-section {
+            margin-bottom: 24px;
+        }
+
+        #preview .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        #preview .progress-label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        #preview .progress-stats {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        #preview .progress-bar-container {
+            width: 100%;
+            height: 32px;
+            border: 3px solid #000;
+            background: #fff;
+            position: relative;
+        }
+
+        #preview .progress-bar-fill {
+            height: 100%;
+            background: #000;
+        }
+
+        #preview .progress-percentage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: #fff;
+            mix-blend-mode: difference;
+        }
+
+        #preview .event-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        #preview .event-card {
+            border: 2px solid #000;
+            padding: 12px;
+        }
+
+        #preview .event-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        #preview .event-name {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        #preview .event-countdown {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        #preview .event-countdown-label {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        #preview .runs-section {
+            margin-bottom: 24px;
+        }
+
+        #preview .section-header {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #000;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #preview .runs-list {
+            border: 2px solid #000;
+        }
+
+        #preview .run-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid #ddd;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        #preview .run-item:last-child {
+            border-bottom: none;
+        }
+
+        #preview .run-header {
+            font-weight: 700;
+            background: #000;
+            color: #fff;
+            border-bottom: 2px solid #000;
+        }
+
+        #preview .run-value {
+            font-weight: 600;
+        }
+
+        #preview .run-label {
+            opacity: 0.6;
+            font-size: 11px;
+            display: block;
+        }
+
+        #preview .empty-runs {
+            padding: 24px;
+            text-align: center;
+            opacity: 0.4;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        #preview .quote-section {
+            padding: 16px;
+            border: 2px solid #000;
+            background: #000;
+            color: #fff;
+            text-align: center;
+        }
+
+        #preview .quote-text {
+            font-size: 14px;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
         .scenario-buttons {
             display: flex;
             gap: 10px;
@@ -155,24 +339,81 @@
         <div id="preview"></div>
     </div>
 
-    <script id="template-source" type="text/x-handlebars-template">
-        {{PLUGIN_TEMPLATE}}
-    </script>
-
     <script>
-        // Load the plugin template
-        let templateSource = '';
-        
-        fetch('plugin.html')
-            .then(response => response.text())
-            .then(html => {
-                // Extract just the body content
-                const bodyMatch = html.match(/<body>([\s\S]*)<\/body>/);
-                if (bodyMatch) {
-                    templateSource = bodyMatch[1];
-                }
-                updatePreview();
-            });
+        // Embedded template from plugin.html
+        const templateSource = `
+    <div class="header">
+        <div class="title">🏃 Running Dashboard</div>
+        <div class="subtitle">{{week_label}}</div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-label">Weekly Progress</div>
+            <div class="progress-stats">{{weekly_miles}} / {{target_miles}} mi</div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: {{progress_percentage}}%"></div>
+            <div class="progress-percentage">{{progress_percentage}}%</div>
+        </div>
+    </div>
+
+    <div class="event-section">
+        <div class="event-card">
+            <div class="event-label">Next Event</div>
+            <div class="event-name">{{event_name}}</div>
+        </div>
+        <div class="event-card">
+            <div class="event-label">Countdown</div>
+            <div class="event-countdown">
+                {{weeks_until_event}}
+                <span class="event-countdown-label">weeks</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="runs-section">
+        <div class="section-header">This Week's Runs</div>
+        {{#if has_runs}}
+        <div class="runs-list">
+            <div class="run-item run-header">
+                <div>Date</div>
+                <div>Distance</div>
+                <div>Time</div>
+                <div>Pace</div>
+            </div>
+            {{#each runs}}
+            <div class="run-item">
+                <div>
+                    <span class="run-label">Date</span>
+                    <span class="run-value">{{date_formatted}}</span>
+                </div>
+                <div>
+                    <span class="run-label">Distance</span>
+                    <span class="run-value">{{distance_miles}} mi</span>
+                </div>
+                <div>
+                    <span class="run-label">Time</span>
+                    <span class="run-value">{{duration_minutes}}m</span>
+                </div>
+                <div>
+                    <span class="run-label">Pace</span>
+                    <span class="run-value">{{pace_per_mile}}</span>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="runs-list">
+            <div class="empty-runs">No runs logged this week — lace up!</div>
+        </div>
+        {{/if}}
+    </div>
+
+    <div class="quote-section">
+        <div class="quote-text">"{{quote}}"</div>
+    </div>
+`;
 
         const scenarios = {
             normal: {
@@ -326,6 +567,11 @@
 
         // Initialize with normal scenario
         window.currentRuns = scenarios.normal.runs;
+        
+        // Update preview on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            updatePreview();
+        });
     </script>
 </body>
 </html>

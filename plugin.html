@@ -194,6 +194,37 @@
             font-style: italic;
         }
 
+        /* Weekly Plan */
+        .plan-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: var(--spacing-xs);
+        }
+
+        .plan-day {
+            border: var(--border-thin) solid #000;
+            padding: var(--spacing-sm);
+            text-align: center;
+        }
+
+        .plan-day-name {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: var(--spacing-xs);
+            letter-spacing: 0.3px;
+        }
+
+        .plan-workout {
+            font-size: 10px;
+            line-height: 1.3;
+            opacity: 0.8;
+        }
+
         /* Quote */
         .quote-section {
             padding: var(--spacing-lg);
@@ -278,6 +309,20 @@
         </div>
         {{/if}}
     </div>
+
+    {{#if has_weekly_plan}}
+    <div class="plan-section">
+        <div class="section-header">This Week's Plan</div>
+        <div class="plan-grid">
+            {{#each weekly_plan}}
+            <div class="plan-day">
+                <div class="plan-day-name">{{day_short}}</div>
+                <div class="plan-workout">{{workout}}</div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    {{/if}}
 
     <div class="quote-section">
         <div class="quote-text">"{{quote}}"</div>

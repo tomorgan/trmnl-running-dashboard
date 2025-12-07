@@ -183,21 +183,21 @@
 </head>
 <body>
     <div class="header">
-        <div class="title">🏃 {{event_name}}</div>
+        <div class="title">🏃 {{ event_name }}</div>
         <div class="stat-item">
             <div class="stat-label">Countdown</div>
-            <div class="stat-value">{{weeks_until_event}}w</div>
+            <div class="stat-value">{{ weeks_until_event }}w</div>
         </div>
         <div class="stat-item">
             <div class="stat-label">This Week</div>
-            <div class="stat-value">{{weekly_miles}}/{{target_miles}}mi</div>
+            <div class="stat-value">{{ weekly_miles }}/{{ target_miles }}mi</div>
         </div>
     </div>
 
     <div class="progress-section">
         <div class="progress-bar-container">
-            <div class="progress-bar-fill" style="width: {{progress_percentage}}%"></div>
-            <div class="progress-percentage">TARGET PROGRESS - {{progress_percentage}}%</div>
+            <div class="progress-bar-fill" style="width: {{ progress_percentage }}%"></div>
+            <div class="progress-percentage">TARGET PROGRESS - {{ progress_percentage }}%</div>
         </div>
     </div>
 
@@ -214,23 +214,23 @@
                 </tr>
             </thead>
             <tbody>
-                {{#each weekly_plan}}
-                <tr class="{{#if completed}}completed{{else}}incomplete{{/if}}">
-                    <td class="day-col">{{day_short}}</td>
+                {% for day in weekly_plan %}
+                <tr class="{% if day.completed %}completed{% else %}incomplete{% endif %}">
+                    <td class="day-col">{{ day.day_short }}</td>
                     <td class="workout-col">
-                        <span class="icon">{{#if completed}}✓{{else}}○{{/if}}</span>{{workout}}
+                        <span class="icon">{% if day.completed %}✓{% else %}○{% endif %}</span>{{ day.workout }}
                     </td>
-                    <td class="distance-col">{{#if distance_miles}}{{distance_miles}}{{/if}}</td>
-                    <td class="time-col">{{#if duration_minutes}}{{duration_minutes}}m{{/if}}</td>
-                    <td class="pace-col">{{#if pace_per_mile}}{{pace_per_mile}}{{/if}}</td>
+                    <td class="distance-col">{% if day.distance_miles %}{{ day.distance_miles }}{% endif %}</td>
+                    <td class="time-col">{% if day.duration_minutes %}{{ day.duration_minutes }}m{% endif %}</td>
+                    <td class="pace-col">{% if day.pace_per_mile %}{{ day.pace_per_mile }}{% endif %}</td>
                 </tr>
-                {{/each}}
+                {% endfor %}
             </tbody>
         </table>
     </div>
 
     <div class="quote-section">
-        <div class="quote-text">"{{quote}}"</div>
+        <div class="quote-text">"{{ quote }}"</div>
     </div>
 </body>
 </html>

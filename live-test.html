@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Dashboard - Live API Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .controls {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .controls h2 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+        }
+
+        button {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background: #333;
+        }
+
+        button:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .preview-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .preview-header {
+            background: #000;
+            color: #fff;
+            padding: 10px 20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .trmnl-size {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        #preview {
+            padding: 0;
+        }
+
+        /* Plugin styles - from plugin.html */
+        #preview {
+            --spacing-xs: 3px;
+            --spacing-sm: 6px;
+            --spacing-md: 8px;
+            --spacing-lg: 10px;
+            --border-thick: 2px;
+            --border-thin: 1px;
+        }
+
+        #preview * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #preview {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: var(--spacing-lg);
+            line-height: 1.2;
+            font-size: 13px;
+        }
+
+        #preview .header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: var(--border-thick) solid #000;
+        }
+
+        #preview .title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        #preview .stat-item {
+            text-align: right;
+        }
+
+        #preview .stat-label {
+            font-size: 10px;
+            opacity: 0.6;
+            text-transform: uppercase;
+        }
+
+        #preview .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        #preview .progress-section {
+            margin-bottom: var(--spacing-md);
+        }
+
+        #preview .progress-bar-container {
+            height: 20px;
+            border: var(--border-thin) solid #000;
+            background: #fff;
+            position: relative;
+        }
+
+        #preview .progress-bar-fill {
+            height: 100%;
+            background: #000;
+        }
+
+        #preview .progress-percentage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+            color: #fff;
+            mix-blend-mode: difference;
+        }
+
+        #preview .weekly-section {
+            margin-bottom: var(--spacing-md);
+        }
+
+        #preview .section-header {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        #preview .weekly-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: var(--border-thin) solid #000;
+            font-size: 11px;
+        }
+
+        #preview .weekly-table th {
+            background: #000;
+            color: #fff;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            text-align: left;
+            font-weight: 600;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        #preview .weekly-table td {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-top: var(--border-thin) solid #ddd;
+        }
+
+        #preview .weekly-table tr.completed {
+            background: #f0f0f0;
+        }
+
+        #preview .weekly-table tr.incomplete {
+            opacity: 0.7;
+        }
+
+        #preview .day-col {
+            width: 12%;
+            font-weight: 600;
+        }
+
+        #preview .workout-col {
+            width: 40%;
+        }
+
+        #preview .distance-col {
+            width: 15%;
+            text-align: center !important;
+        }
+
+        #preview .time-col {
+            width: 14%;
+            text-align: center !important;
+        }
+
+        #preview .pace-col {
+            width: 15%;
+            text-align: center !important;
+        }
+
+        #preview .icon {
+            display: inline-block;
+            width: 14px;
+            text-align: center;
+            margin-right: 3px;
+        }
+
+        #preview .quote-section {
+            padding: var(--spacing-sm);
+            border: var(--border-thin) solid #000;
+            background: #000;
+            color: #fff;
+            text-align: center;
+        }
+
+        #preview .quote-text {
+            font-size: 11px;
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        .raw-data {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .raw-data pre {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h2>🏃 Running Dashboard - Live API Test</h2>
+        <button id="loadBtn" onclick="loadFromAPI()">Load from Live API</button>
+        <button onclick="toggleRawData()">Toggle Raw Data</button>
+        <div id="status"></div>
+        <div id="rawData" class="raw-data" style="display: none;"></div>
+    </div>
+
+    <div class="preview-container">
+        <div class="preview-header">
+            <span>TRMNL Preview</span>
+            <span class="trmnl-size">800×480px monochrome display</span>
+        </div>
+        <div id="preview">
+            <div style="text-align: center; padding: 40px; opacity: 0.5;">
+                Click "Load from Live API" to fetch and display data
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://trmnl-running-api-dnd7c0btfygwbmd8.northeurope-01.azurewebsites.net/api/running-data';
+        
+        const templateSource = `
+    <div class="header">
+        <div class="title">🏃 {{event_name}}</div>
+        <div class="stat-item">
+            <div class="stat-label">Countdown</div>
+            <div class="stat-value">{{weeks_until_event}}w</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">This Week</div>
+            <div class="stat-value">{{weekly_miles}}/{{target_miles}}mi</div>
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: {{progress_percentage}}%"></div>
+            <div class="progress-percentage">TARGET PROGRESS - {{progress_percentage}}%</div>
+        </div>
+    </div>
+
+    <div class="weekly-section">
+        <div class="section-header">This Week</div>
+        <table class="weekly-table">
+            <thead>
+                <tr>
+                    <th class="day-col">Day</th>
+                    <th class="workout-col">Planned</th>
+                    <th class="distance-col">Dist</th>
+                    <th class="time-col">Time</th>
+                    <th class="pace-col">Pace</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each weekly_plan}}
+                <tr class="{{#if completed}}completed{{else}}incomplete{{/if}}">
+                    <td class="day-col">{{day_short}}</td>
+                    <td class="workout-col">
+                        <span class="icon">{{#if completed}}✓{{else}}○{{/if}}</span>{{workout}}
+                    </td>
+                    <td class="distance-col">{{#if distance_miles}}{{distance_miles}}{{/if}}</td>
+                    <td class="time-col">{{#if duration_minutes}}{{duration_minutes}}m{{/if}}</td>
+                    <td class="pace-col">{{#if pace_per_mile}}{{pace_per_mile}}{{/if}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="quote-section">
+        <div class="quote-text">"{{quote}}"</div>
+    </div>
+`;
+
+        let currentData = null;
+
+        async function loadFromAPI() {
+            const statusEl = document.getElementById('status');
+            const loadBtn = document.getElementById('loadBtn');
+            
+            loadBtn.disabled = true;
+            statusEl.className = 'status loading';
+            statusEl.textContent = '⏳ Loading data from API...';
+
+            try {
+                const response = await fetch(API_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                currentData = data;
+
+                // Store raw data
+                document.getElementById('rawData').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+
+                // Render template
+                const template = Handlebars.compile(templateSource);
+                const html = template(data);
+                document.getElementById('preview').innerHTML = html;
+
+                statusEl.className = 'status success';
+                statusEl.textContent = '✅ Data loaded successfully from live API!';
+                
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = '❌ Error loading data: ' + error.message;
+                console.error('API Error:', error);
+            } finally {
+                loadBtn.disabled = false;
+            }
+        }
+
+        function toggleRawData() {
+            const rawDataEl = document.getElementById('rawData');
+            if (rawDataEl.style.display === 'none') {
+                rawDataEl.style.display = 'block';
+            } else {
+                rawDataEl.style.display = 'none';
+            }
+        }
+
+        // Auto-load on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadFromAPI();
+        });
+    </script>
+</body>
+</html>

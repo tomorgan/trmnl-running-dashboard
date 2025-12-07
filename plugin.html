@@ -118,6 +118,7 @@
             text-align: left;
             font-weight: 600;
             font-size: 10px;
+            text-transform: uppercase;
         }
 
         .weekly-table td {
@@ -125,12 +126,12 @@
             border-top: var(--border-thin) solid #ddd;
         }
 
-        .weekly-table tr.plan-row {
-            opacity: 0.7;
+        .weekly-table tr.completed {
+            background: #f0f0f0;
         }
 
-        .weekly-table tr.run-row {
-            font-weight: 600;
+        .weekly-table tr.incomplete {
+            opacity: 0.7;
         }
 
         .day-col {
@@ -139,11 +140,21 @@
         }
 
         .workout-col {
-            width: 38%;
+            width: 40%;
         }
 
-        .distance-col, .time-col, .pace-col {
-            width: 16%;
+        .distance-col {
+            width: 15%;
+            text-align: right;
+        }
+
+        .time-col {
+            width: 14%;
+            text-align: right;
+        }
+
+        .pace-col {
+            width: 15%;
             text-align: right;
         }
 
@@ -196,24 +207,20 @@
             <thead>
                 <tr>
                     <th class="day-col">Day</th>
-                    <th class="workout-col">Planned / Actual</th>
-                    <th class="distance-col">Distance</th>
+                    <th class="workout-col">Planned</th>
+                    <th class="distance-col">Dist</th>
                     <th class="time-col">Time</th>
                     <th class="pace-col">Pace</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each weekly_plan}}
-                <tr class="{{#if completed}}run-row{{else}}plan-row{{/if}}">
+                <tr class="{{#if completed}}completed{{else}}incomplete{{/if}}">
                     <td class="day-col">{{day_short}}</td>
                     <td class="workout-col">
-                        {{#if completed}}
-                        <span class="icon">✓</span>{{workout}}
-                        {{else}}
-                        <span class="icon">○</span>{{workout}}
-                        {{/if}}
+                        <span class="icon">{{#if completed}}✓{{else}}○{{/if}}</span>{{workout}}
                     </td>
-                    <td class="distance-col">{{#if distance_miles}}{{distance_miles}} mi{{/if}}</td>
+                    <td class="distance-col">{{#if distance_miles}}{{distance_miles}}{{/if}}</td>
                     <td class="time-col">{{#if duration_minutes}}{{duration_minutes}}m{{/if}}</td>
                     <td class="pace-col">{{#if pace_per_mile}}{{pace_per_mile}}{{/if}}</td>
                 </tr>

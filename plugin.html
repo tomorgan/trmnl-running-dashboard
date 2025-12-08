@@ -31,9 +31,7 @@
 
         /* Header - Compact */
         .header {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: var(--spacing-md);
+            text-align: center;
             margin-bottom: var(--spacing-md);
             padding-bottom: var(--spacing-sm);
             border-bottom: var(--border-thick) solid #000;
@@ -42,10 +40,17 @@
         .title {
             font-size: 18px;
             font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-lg);
         }
 
         .stat-item {
-            text-align: right;
+            display: inline-block;
         }
 
         .stat-label {
@@ -184,13 +189,15 @@
 <body>
     <div class="header">
         <div class="title">🏃 {{ event_name }}</div>
-        <div class="stat-item">
-            <div class="stat-label">Countdown</div>
-            <div class="stat-value">{{ weeks_until_event }}w</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label">This Week</div>
-            <div class="stat-value">{{ weekly_miles }}/{{ target_miles }}mi</div>
+        <div class="stats-row">
+            <div class="stat-item">
+                <div class="stat-label">Countdown</div>
+                <div class="stat-value">{{ weeks_until_event }}w</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">This Week</div>
+                <div class="stat-value">{{ weekly_miles }}/{{ target_miles }}mi</div>
+            </div>
         </div>
     </div>
 

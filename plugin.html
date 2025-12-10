@@ -148,21 +148,26 @@
         }
 
         .day-col {
-            width: 12%;
+            width: 10%;
             font-weight: 600;
         }
 
+        .weather-col {
+            width: 14%;
+            font-size: 11px;
+        }
+
         .workout-col {
-            width: 40%;
+            width: 32%;
         }
 
         .distance-col {
-            width: 15%;
+            width: 13%;
             text-align: center !important;
         }
 
         .time-col {
-            width: 14%;
+            width: 12%;
             text-align: center !important;
         }
 
@@ -223,6 +228,7 @@
             <thead>
                 <tr>
                     <th class="day-col">Day</th>
+                    <th class="weather-col">Weather</th>
                     <th class="workout-col">Planned</th>
                     <th class="distance-col">Dist</th>
                     <th class="time-col">Time</th>
@@ -233,6 +239,7 @@
                 {% for day in weekly_plan %}
                 <tr class="{% if day.completed %}completed{% else %}incomplete{% endif %}">
                     <td class="day-col">{{ day.day_short }}</td>
+                    <td class="weather-col">{% if day.weather %}{{ day.weather.temp_morning|round }}°C{% if day.weather.precipitation_prob > 0 %} 💧{{ day.weather.precipitation_prob }}%{% endif %}{% endif %}</td>
                     <td class="workout-col">
                         <span class="icon">{% if day.completed %}✓{% else %}○{% endif %}</span>{{ day.workout }}
                     </td>

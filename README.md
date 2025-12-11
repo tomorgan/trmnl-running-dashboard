@@ -15,33 +15,72 @@ The plugin expects a JSON endpoint that returns the following structure:
 
 ```json
 {
+  "week_label": "Week of Dec 1-7, 2025",
   "weekly_miles": 15.5,
   "target_miles": 25.0,
+  "progress_percentage": 62,
   "weeks_until_event": 8,
   "event_name": "London Marathon 2026",
-  "runs": [
+  "has_weekly_plan": true,
+  "weekly_plan": [
     {
-      "date": "2025-12-01",
+      "day": "Monday",
+      "day_short": "Mon",
+      "workout": "Rest day",
+      "completed": false
+    },
+    {
+      "day": "Tuesday",
+      "day_short": "Tue",
+      "workout": "Easy 5 miles",
+      "completed": true,
       "distance_miles": 5.2,
       "duration_minutes": 45,
-      "pace_per_mile": "8:39"
+      "pace_per_mile": "8:39",
+      "weather": {
+        "temp_morning": 8,
+        "precipitation_prob": 20
+      }
     },
     {
-      "date": "2025-12-03",
+      "day": "Wednesday",
+      "day_short": "Wed",
+      "workout": "Tempo 6 miles",
+      "completed": true,
       "distance_miles": 6.1,
       "duration_minutes": 52,
-      "pace_per_mile": "8:31"
-    },
-    {
-      "date": "2025-12-05",
-      "distance_miles": 4.2,
-      "duration_minutes": 36,
-      "pace_per_mile": "8:34"
+      "pace_per_mile": "8:31",
+      "weather": {
+        "temp_morning": 10,
+        "precipitation_prob": 0
+      }
     }
   ],
   "quote": "The miracle isn't that I finished. The miracle is that I had the courage to start."
 }
 ```
+
+### Field Descriptions
+
+- **week_label**: Display label for the current week (e.g., "Week of Dec 1-7, 2025")
+- **weekly_miles**: Total miles run this week
+- **target_miles**: Target miles for the week
+- **progress_percentage**: Percentage of weekly goal achieved (0-100)
+- **weeks_until_event**: Number of weeks until next event
+- **event_name**: Name of your target running event
+- **has_weekly_plan**: Boolean indicating if weekly_plan array has items
+- **weekly_plan**: Array of 7 days (Monday-Sunday) with:
+  - **day**: Full day name
+  - **day_short**: Abbreviated day name (Mon, Tue, etc.)
+  - **workout**: Description of planned workout
+  - **completed**: Boolean indicating if workout was completed
+  - **distance_miles**: (Optional) Actual distance if completed
+  - **duration_minutes**: (Optional) Actual duration if completed
+  - **pace_per_mile**: (Optional) Actual pace if completed (format: "8:30")
+  - **weather**: (Optional) Weather forecast object with:
+    - **temp_morning**: Morning temperature in Celsius
+    - **precipitation_prob**: Precipitation probability (0-100)
+- **quote**: Inspirational running quote
 
 ## Quick Start
 

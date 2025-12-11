@@ -99,15 +99,15 @@ The plugin expects a JSON endpoint that returns the following structure:
    node validate.js
    ```
 
-3. **Implement your API** (see `API-GUIDE.md`)
-   - Create endpoint that returns running data
-   - Transform to TRMNL merge variable format
+3. **Implement your API**
+   - Create endpoint that returns running data. You can either do this yourself or use my project: https://github.com/tomorgan/trmnl-running-dashboard-api
    - Deploy to a public HTTPS endpoint
 
 4. **Deploy to TRMNL**
-   - Upload `plugin.html` and `plugin.json`
-   - Configure your API endpoint URL
-   - Add API key if required
+   - Create a new Private Plugin
+   - Set the API endpoint to your deployed API public endpoint
+   - Edit Markup and use `plugin.html` as the base. Remove the <html>, <head> and <body> tags to avoid TRMNL syntax warnings
+   - The markup is designed for full-screen display only.   
 
 ## Files
 
@@ -128,7 +128,7 @@ This plugin is built using the [TRMNL Framework](https://usetrmnl.com/framework)
 1. Open `index.html` in a browser for a quick preview
 2. Review `API-GUIDE.md` for implementing your data source
 3. Test with `sample-merge-variables.json` structure
-4. Deploy `plugin.html` and `plugin.json` to TRMNL
+4. Deploy `plugin.html` to TRMNL
 
 ## License
 
